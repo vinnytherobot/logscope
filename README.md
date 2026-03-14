@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://via.placeholder.com/150/000000/FFFFFF/?text=LogScope" alt="LogScope Logo" width="150" height="150">
+  <img src="assets/logo.png" alt="LogScope Logo" width="150" height="150">
   
   # LogScope
   
