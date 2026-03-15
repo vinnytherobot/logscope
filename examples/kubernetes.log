@@ -1,0 +1,60 @@
+2026-03-15T10:00:01Z api-deployment-6f9c7d8b5c-abc12 api-container INFO Starting API server on port 8080
+2026-03-15T10:00:02Z api-deployment-6f9c7d8b5c-abc12 api-container INFO Loading configuration
+2026-03-15T10:00:03Z api-deployment-6f9c7d8b5c-abc12 api-container INFO Connecting to database
+2026-03-15T10:00:04Z postgres-0 postgres INFO PostgreSQL starting
+2026-03-15T10:00:05Z postgres-0 postgres INFO Listening on port 5432
+2026-03-15T10:00:06Z api-deployment-6f9c7d8b5c-abc12 api-container INFO Database connection established
+2026-03-15T10:00:07Z redis-7c9d6f8b9d-xk29m redis INFO Redis ready to accept connections
+2026-03-15T10:00:08Z api-deployment-6f9c7d8b5c-abc12 api-container INFO Cache initialized
+2026-03-15T10:00:09Z api-deployment-6f9c7d8b5c-abc12 api-container INFO API server ready
+2026-03-15T10:00:10Z ingress-nginx-controller-6c9f ingress INFO GET /health 200
+2026-03-15T10:00:11Z api-deployment-6f9c7d8b5c-abc12 api-container INFO GET /api/projects 200
+2026-03-15T10:00:12Z api-deployment-6f9c7d8b5c-abc12 api-container INFO GET /api/projects/12 200
+2026-03-15T10:00:13Z api-deployment-6f9c7d8b5c-abc12 api-container INFO POST /api/auth/login 200
+2026-03-15T10:00:14Z api-deployment-6f9c7d8b5c-abc12 api-container INFO User authenticated id=42
+2026-03-15T10:00:15Z worker-deployment-78fd6 worker INFO Background job started
+2026-03-15T10:00:16Z worker-deployment-78fd6 worker INFO Sending emails
+2026-03-15T10:00:17Z worker-deployment-78fd6 worker INFO Email sent user_id=42
+2026-03-15T10:00:18Z api-deployment-6f9c7d8b5c-abc12 api-container INFO GET /api/tasks 200
+2026-03-15T10:00:19Z api-deployment-6f9c7d8b5c-abc12 api-container INFO POST /api/tasks 201
+2026-03-15T10:00:20Z api-deployment-6f9c7d8b5c-abc12 api-container INFO Task created id=91
+2026-03-15T10:00:21Z api-deployment-6f9c7d8b5c-abc12 api-container WARN Slow request detected 412ms
+2026-03-15T10:00:22Z api-deployment-6f9c7d8b5c-abc12 api-container INFO GET /api/tasks 200
+2026-03-15T10:00:23Z api-deployment-6f9c7d8b5c-abc12 api-container INFO PUT /api/tasks/91 200
+2026-03-15T10:00:24Z api-deployment-6f9c7d8b5c-abc12 api-container INFO Task updated id=91
+2026-03-15T10:00:25Z redis-7c9d6f8b9d-xk29m redis INFO Cache set key=tasks
+2026-03-15T10:00:26Z api-deployment-6f9c7d8b5c-abc12 api-container INFO GET /api/users 200
+2026-03-15T10:00:27Z api-deployment-6f9c7d8b5c-abc12 api-container INFO GET /api/users/42 200
+2026-03-15T10:00:28Z api-deployment-6f9c7d8b5c-abc12 api-container INFO GET /api/dashboard 200
+2026-03-15T10:00:29Z ingress-nginx-controller-6c9f ingress INFO GET /api/projects 200
+2026-03-15T10:00:30Z api-deployment-6f9c7d8b5c-abc12 api-container INFO GET /api/projects 200
+2026-03-15T10:00:31Z api-deployment-6f9c7d8b5c-abc12 api-container INFO GET /api/projects/45 200
+2026-03-15T10:00:32Z api-deployment-6f9c7d8b5c-abc12 api-container INFO POST /api/comments 201
+2026-03-15T10:00:33Z api-deployment-6f9c7d8b5c-abc12 api-container INFO Comment created id=301
+2026-03-15T10:00:34Z worker-deployment-78fd6 worker INFO Cleanup job started
+2026-03-15T10:00:35Z worker-deployment-78fd6 worker INFO Removing temp files
+2026-03-15T10:00:36Z worker-deployment-78fd6 worker INFO Cleanup finished
+2026-03-15T10:00:37Z api-deployment-6f9c7d8b5c-abc12 api-container INFO GET /api/settings 200
+2026-03-15T10:00:38Z api-deployment-6f9c7d8b5c-abc12 api-container INFO PUT /api/settings 200
+2026-03-15T10:00:39Z api-deployment-6f9c7d8b5c-abc12 api-container INFO Settings updated
+2026-03-15T10:00:40Z api-deployment-6f9c7d8b5c-abc12 api-container WARN Memory usage high 82%
+2026-03-15T10:00:41Z api-deployment-6f9c7d8b5c-abc12 api-container INFO GET /api/notifications 200
+2026-03-15T10:00:42Z api-deployment-6f9c7d8b5c-abc12 api-container INFO Notification delivered
+2026-03-15T10:00:43Z worker-deployment-78fd6 worker INFO Sync job started
+2026-03-15T10:00:44Z worker-deployment-78fd6 worker INFO Syncing external API
+2026-03-15T10:00:45Z worker-deployment-78fd6 worker INFO Sync completed
+2026-03-15T10:00:46Z api-deployment-6f9c7d8b5c-abc12 api-container INFO GET /api/projects 200
+2026-03-15T10:00:47Z api-deployment-6f9c7d8b5c-abc12 api-container INFO GET /api/tasks 200
+2026-03-15T10:00:48Z api-deployment-6f9c7d8b5c-abc12 api-container INFO DELETE /api/tasks/91 200
+2026-03-15T10:00:49Z api-deployment-6f9c7d8b5c-abc12 api-container INFO Task deleted id=91
+2026-03-15T10:00:50Z redis-7c9d6f8b9d-xk29m redis INFO Cache invalidated key=tasks
+2026-03-15T10:00:51Z api-deployment-6f9c7d8b5c-abc12 api-container INFO GET /api/tasks 200
+2026-03-15T10:00:52Z api-deployment-6f9c7d8b5c-abc12 api-container INFO GET /api/users 200
+2026-03-15T10:00:53Z api-deployment-6f9c7d8b5c-abc12 api-container INFO GET /api/projects 200
+2026-03-15T10:00:54Z ingress-nginx-controller-6c9f ingress INFO GET /api/health 200
+2026-03-15T10:00:55Z api-deployment-6f9c7d8b5c-abc12 api-container ERROR Database timeout
+2026-03-15T10:00:56Z api-deployment-6f9c7d8b5c-abc12 api-container INFO Retrying database connection
+2026-03-15T10:00:57Z api-deployment-6f9c7d8b5c-abc12 api-container INFO Database connection restored
+2026-03-15T10:00:58Z api-deployment-6f9c7d8b5c-abc12 api-container INFO GET /api/projects 200
+2026-03-15T10:00:59Z api-deployment-6f9c7d8b5c-abc12 api-container INFO GET /api/dashboard 200
+2026-03-15T10:01:00Z api-deployment-6f9c7d8b5c-abc12 api-container INFO System healthy  

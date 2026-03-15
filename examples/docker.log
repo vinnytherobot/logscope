@@ -1,0 +1,90 @@
+2026-03-15T10:00:01Z web-1  | INFO  Starting Node server on port 3000
+2026-03-15T10:00:02Z web-1  | INFO  Loading environment variables
+2026-03-15T10:00:03Z web-1  | INFO  Connecting to database
+2026-03-15T10:00:04Z db-1   | INFO  PostgreSQL starting
+2026-03-15T10:00:05Z db-1   | INFO  Listening on port 5432
+2026-03-15T10:00:06Z web-1  | INFO  Database connection established
+2026-03-15T10:00:07Z web-1  | INFO  Cache service initialized
+2026-03-15T10:00:08Z redis-1| INFO  Redis server started
+2026-03-15T10:00:09Z web-1  | INFO  Application ready
+2026-03-15T10:00:10Z web-1  | INFO  GET /health 200
+2026-03-15T10:00:11Z web-1  | INFO  GET /api/projects 200
+2026-03-15T10:00:12Z web-1  | INFO  GET /api/projects/12 200
+2026-03-15T10:00:13Z web-1  | INFO  POST /api/auth/login 200
+2026-03-15T10:00:14Z web-1  | INFO  User authenticated id=42
+2026-03-15T10:00:15Z web-1  | INFO  GET /api/dashboard 200
+2026-03-15T10:00:16Z web-1  | WARN  Slow request detected (320ms)
+2026-03-15T10:00:17Z web-1  | INFO  GET /api/tasks 200
+2026-03-15T10:00:18Z web-1  | INFO  POST /api/tasks 201
+2026-03-15T10:00:19Z web-1  | INFO  Task created id=88
+2026-03-15T10:00:20Z web-1  | INFO  GET /api/tasks 200
+2026-03-15T10:00:21Z worker-1| INFO Background job started
+2026-03-15T10:00:22Z worker-1| INFO Processing email queue
+2026-03-15T10:00:23Z worker-1| INFO Email sent user_id=42
+2026-03-15T10:00:24Z web-1  | INFO  PUT /api/tasks/88 200
+2026-03-15T10:00:25Z web-1  | INFO  Task updated id=88
+2026-03-15T10:00:26Z web-1  | INFO  GET /api/users 200
+2026-03-15T10:00:27Z web-1  | INFO  GET /api/users/42 200
+2026-03-15T10:00:28Z redis-1| INFO  Cache hit key=user:42
+2026-03-15T10:00:29Z web-1  | INFO  GET /api/notifications 200
+2026-03-15T10:00:30Z web-1  | INFO  Notification delivered
+2026-03-15T10:00:31Z web-1  | INFO  GET /api/settings 200
+2026-03-15T10:00:32Z web-1  | INFO  PUT /api/settings 200
+2026-03-15T10:00:33Z web-1  | INFO  Settings updated
+2026-03-15T10:00:34Z worker-1| INFO Cleanup job started
+2026-03-15T10:00:35Z worker-1| INFO Removing temp files
+2026-03-15T10:00:36Z worker-1| INFO Cleanup finished
+2026-03-15T10:00:37Z web-1  | INFO  GET /api/projects 200
+2026-03-15T10:00:38Z web-1  | INFO  GET /api/projects/45 200
+2026-03-15T10:00:39Z web-1  | INFO  POST /api/comments 201
+2026-03-15T10:00:40Z web-1  | INFO  Comment created id=301
+2026-03-15T10:00:41Z web-1  | INFO  GET /api/comments?project=45 200
+2026-03-15T10:00:42Z web-1  | WARN  High memory usage (75%)
+2026-03-15T10:00:43Z web-1  | INFO  GET /api/projects 200
+2026-03-15T10:00:44Z web-1  | INFO  GET /api/users 200
+2026-03-15T10:00:45Z web-1  | ERROR Database timeout
+2026-03-15T10:00:46Z web-1  | INFO  Retrying database query
+2026-03-15T10:00:47Z web-1  | INFO  Query successful
+2026-03-15T10:00:48Z web-1  | INFO  GET /api/projects 200
+2026-03-15T10:00:49Z web-1  | INFO  GET /api/tasks 200
+2026-03-15T10:00:50Z web-1  | INFO  GET /api/health 200
+2026-03-15T10:00:51Z redis-1| INFO  Cache set key=projects
+2026-03-15T10:00:52Z web-1  | INFO  GET /api/projects 200
+2026-03-15T10:00:53Z web-1  | INFO  GET /api/tasks 200
+2026-03-15T10:00:54Z web-1  | INFO  GET /api/users 200
+2026-03-15T10:00:55Z worker-1| INFO Sending scheduled reports
+2026-03-15T10:00:56Z worker-1| INFO Report delivered
+2026-03-15T10:00:57Z web-1  | INFO  GET /api/dashboard 200
+2026-03-15T10:00:58Z web-1  | INFO  GET /api/projects 200
+2026-03-15T10:00:59Z web-1  | INFO  GET /api/projects/12 200
+2026-03-15T10:01:00Z web-1  | INFO  GET /api/projects/45 200
+2026-03-15T10:01:01Z web-1  | INFO  POST /api/tasks 201
+2026-03-15T10:01:02Z web-1  | INFO  Task created id=89
+2026-03-15T10:01:03Z web-1  | INFO  GET /api/tasks 200
+2026-03-15T10:01:04Z web-1  | INFO  PUT /api/tasks/89 200
+2026-03-15T10:01:05Z web-1  | INFO  Task updated id=89
+2026-03-15T10:01:06Z web-1  | INFO  DELETE /api/tasks/88 200
+2026-03-15T10:01:07Z web-1  | INFO  Task deleted id=88
+2026-03-15T10:01:08Z redis-1| INFO  Cache invalidated key=tasks
+2026-03-15T10:01:09Z web-1  | INFO  GET /api/tasks 200
+2026-03-15T10:01:10Z web-1  | INFO  GET /api/projects 200
+2026-03-15T10:01:11Z web-1  | INFO  GET /api/users 200
+2026-03-15T10:01:12Z web-1  | INFO  GET /api/settings 200
+2026-03-15T10:01:13Z web-1  | INFO  GET /api/notifications 200
+2026-03-15T10:01:14Z worker-1| INFO Background sync started
+2026-03-15T10:01:15Z worker-1| INFO Syncing remote data
+2026-03-15T10:01:16Z worker-1| INFO Sync completed
+2026-03-15T10:01:17Z web-1  | INFO  GET /api/dashboard 200
+2026-03-15T10:01:18Z web-1  | INFO  GET /api/projects 200
+2026-03-15T10:01:19Z web-1  | INFO  GET /api/projects/45 200
+2026-03-15T10:01:20Z web-1  | WARN  API rate limit approaching
+2026-03-15T10:01:21Z web-1  | INFO  GET /api/tasks 200
+2026-03-15T10:01:22Z web-1  | INFO  GET /api/users 200
+2026-03-15T10:01:23Z web-1  | INFO  GET /api/projects 200
+2026-03-15T10:01:24Z web-1  | INFO  GET /api/health 200
+2026-03-15T10:01:25Z web-1  | INFO  System operating normally
+2026-03-15T10:01:26Z web-1  | INFO  Background metrics collected
+2026-03-15T10:01:27Z web-1  | INFO  GET /api/projects 200
+2026-03-15T10:01:28Z web-1  | INFO  GET /api/tasks 200
+2026-03-15T10:01:29Z web-1  | INFO  GET /api/users 200
+2026-03-15T10:01:30Z web-1  | INFO  Server heartbeat OK
