@@ -14,6 +14,8 @@ from rich.theme import Theme
 
 from .parser import parse_line, LogEntry
 
+if sys.platform == "win32" and hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8")
 
 class LogScopeHighlighter(RegexHighlighter):
     """Apply style to anything that looks like an IP address, URL, or timestamp."""
