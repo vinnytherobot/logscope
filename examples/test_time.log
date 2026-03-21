@@ -1,0 +1,5 @@
+[INFO] 2026-01-01T10:00:00Z Earliest log
+[INFO] 2026-03-20T12:00:00Z Yesterday log
+{"timestamp": "2026-03-21T10:00:00Z", "level": "info", "message": "Today morning log"}
+{"timestamp": "2026-03-21T13:50:00Z", "level": "warn", "message": "Today afternoon log"}
+[ERROR] 2026-03-21T15:00:00Z Future log

@@ -1,6 +1,7 @@
 import sys
 import time
 from pathlib import Path
+from datetime import datetime
 from typing import Optional, List, TextIO
 
 from rich.console import Console, Group
@@ -100,7 +101,7 @@ def get_lines(file: TextIO, follow: bool):
         return
 
 
-def stream_logs(file: TextIO, follow: bool, level: Optional[str] = None, search: Optional[str] = None, export_html: Optional[Path] = None, show_line_numbers: bool = False):
+def stream_logs(file: TextIO, follow: bool, level: Optional[str] = None, search: Optional[str] = None, export_html: Optional[Path] = None, show_line_numbers: bool = False, since: Optional[datetime] = None, until: Optional[datetime] = None):
     """Basic console mode: prints directly to stdout, supporting tails."""
     if export_html:
         console.record = True
@@ -118,6 +119,12 @@ def stream_logs(file: TextIO, follow: bool, level: Optional[str] = None, search:
             if search and search.lower() not in line.lower():
                 continue
                 
+            if entry.timestamp:
+                if since and entry.timestamp.replace(tzinfo=None) < since.replace(tzinfo=None):
+                    continue
+                if until and entry.timestamp.replace(tzinfo=None) > until.replace(tzinfo=None):
+                    continue
+                
             formatted = format_log(entry, line_number=line_count if show_line_numbers else None)
             console.print(formatted)
     finally:
@@ -126,7 +133,7 @@ def stream_logs(file: TextIO, follow: bool, level: Optional[str] = None, search:
             console.print(f"\n[bold green]✅ Logs exported successfully to {export_html}[/bold green]")
 
 
-def run_dashboard(file: TextIO, follow: bool, level_filter: Optional[str] = None, search_filter: Optional[str] = None, show_line_numbers: bool = False):
+def run_dashboard(file: TextIO, follow: bool, level_filter: Optional[str] = None, search_filter: Optional[str] = None, show_line_numbers: bool = False, since: Optional[datetime] = None, until: Optional[datetime] = None):
     """Dashboard mode: Shows a summary stats panel and recent logs layout."""
     
     stats = {
@@ -197,6 +204,12 @@ def run_dashboard(file: TextIO, follow: bool, level_filter: Optional[str] = None
                     continue
                 if search_filter and search_filter.lower() not in line.lower():
                     continue
+                    
+                if entry.timestamp:
+                    if since and entry.timestamp.replace(tzinfo=None) < since.replace(tzinfo=None):
+                        continue
+                    if until and entry.timestamp.replace(tzinfo=None) > until.replace(tzinfo=None):
+                        continue
                     
                 # Update stats tally
                 total_processed += 1
