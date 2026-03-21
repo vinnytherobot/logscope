@@ -19,6 +19,7 @@ def main(
     search: Annotated[Optional[str], typer.Option("--search", "-s", help="Search string to filter logs")] = None,
     dashboard: Annotated[bool, typer.Option("--dashboard", "-d", help="Open visual dashboard showing log statistics")] = False,
     export_html: Annotated[Optional[Path], typer.Option("--export-html", help="Export the beautiful log output to an HTML file")] = None,
+    line_numbers: Annotated[bool, typer.Option("--line-numbers", "-n", help="Show line numbers for each log message")] = False,
 ):
     """
     [blue]LogScope[/blue] parses standard logs and makes them [bold]beautiful[/bold] and [bold]readable[/bold].
@@ -29,13 +30,13 @@ def main(
             raise typer.Exit(1)
         file_obj = sys.stdin
     else:
-        file_obj = open(log_file, "r", encoding="utf-8")
+        file_obj = open(log_file, "r", encoding="utf-8", errors="replace")
 
     try:
         if dashboard:
-            run_dashboard(file_obj, follow=follow, level_filter=level, search_filter=search)
+            run_dashboard(file_obj, follow=follow, level_filter=level, search_filter=search, show_line_numbers=line_numbers)
         else:
-            stream_logs(file_obj, follow=follow, level=level, search=search, export_html=export_html)
+            stream_logs(file_obj, follow=follow, level=level, search=search, export_html=export_html, show_line_numbers=line_numbers)
     finally:
         if log_file is not None:
             file_obj.close()

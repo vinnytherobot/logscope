@@ -1,0 +1,10 @@
+[INFO] Server started on http://127.0.0.1:8000
+[DEBUG] Loading configuration from C:\Users\App\config.yaml
+[INFO] GET /api/v1/users 200 45ms
+[WARN] POST /api/v1/login 401 12ms
+[ERROR] Database connection failed for user admin@example.com
+[CRITICAL] Memory limit reached! UUID: 550e8400-e29b-41d4-a716-446655440000
+[INFO] File uploaded to /var/www/uploads/image.png
+[FATAL] System shutdown initiated.
+[INFO] PUT /settings 500 1500ms
+{"level": "error", "message": "JSON log example with path /tmp/logs/1.log", "timestamp": "2026-03-21T13:55:00Z"}
