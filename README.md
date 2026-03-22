@@ -25,7 +25,9 @@
 *   **Auto-Highlighting**: Magically highlights `IPs`, `URLs`, `Dates/Timestamps`, `UUIDs`, and `E-Mails` with dynamic colors.
 *   **Live Dashboard**: Watch logs stream in real-time alongside a live statistics panel keeping track of Error vs Info counts (`--dashboard`).
 *   **HTML Export**: Loved your console output so much you want to share it? Export the beautiful log structure directly to an HTML file to share with your team! (`--export-html results.html`)
-*   **Filtering**: Only see what matters. Filter by level (`--level ERROR`) or via text search (`--search timeout`).
+*   **Filtering**: Filter by one or more levels (`--level ERROR` or `--level ERROR,WARN,INFO`). Search by substring (`--search`) or regular expression (`--regex` / `-e`), with optional **case-sensitive** matching and **invert match** (`--invert-match` / `-v`, grep-style) to hide matching lines.
+*   **Plain output**: Use `--no-color` when you need unstyled text (e.g. piping to other tools or logs without ANSI codes).
+*   **Gzip logs**: Read `.gz` files directly—LogScope opens them as text without a manual `zcat` pipe.
 
 ---
 
@@ -61,8 +63,26 @@ logscope backend.log --follow
 # Filter only errors
 logscope production.log --level ERROR
 
+# Multiple levels (comma-separated)
+logscope production.log --level ERROR,WARN,INFO
+
 # Search text dynamically
 logscope server.log --search "Connection Timeout"
+
+# Regex search (requires --search)
+logscope server.log --search "timeout|refused|ECONNRESET" --regex
+
+# Hide lines that match a pattern
+logscope noisy.log --search "healthcheck" --invert-match
+
+# Case-sensitive search
+logscope app.log --search "UserID" --case-sensitive
+
+# No colors (plain terminal output)
+logscope app.log --no-color
+
+# Compressed log file
+logscope archive/app.log.gz
 ```
 
 ### Piping from other commands (Stdin support)
@@ -94,7 +114,8 @@ logscope failed_job.log --export-html bug_report.html
 
 *   [**Rich**](https://github.com/Textualize/rich) -> UI Layouts, Colors, Highlighters, HTML Export.
 *   [**Typer**](https://github.com/tiangolo/typer) -> Modern, fast, and robust CLI creation.
-*   **Pathlib / Sys** -> File and standard input streaming.
+*   [**typing-extensions**](https://github.com/python/typing_extensions) -> Typed CLI annotations on Python 3.9.
+*   **Pathlib / Sys / gzip** -> File and standard input streaming; gzip text logs.
 
 ## Contributing
 Open an issue or submit a pull request! Tests are written using `pytest`.
