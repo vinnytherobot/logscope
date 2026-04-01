@@ -1,0 +1,52 @@
+name: Dependency Update
+
+on:
+  schedule:
+    - cron: "0 7 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          version: "1.8.3"
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+
+      - name: Update dependencies
+        run: |
+          poetry update
+          poetry lock --no-update
+
+      - name: Run tests after update
+        run: |
+          poetry install --no-interaction --with dev
+          poetry run pytest -q
+
+      - name: Create grouped dependency PR
+        uses: peter-evans/create-pull-request@v6
+        with:
+          commit-message: "chore(deps): weekly dependency update"
+          title: "chore(deps): weekly dependency update"
+          body: |
+            Weekly automated dependency refresh for LogScope.
+
+            - Updated Poetry-managed dependencies
+            - Executed test suite after update
+          branch: chore/weekly-dependency-update
+          delete-branch: true

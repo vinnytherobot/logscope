@@ -1,0 +1,66 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          version: "1.8.3"
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+
+      - name: Validate tag and project version
+        run: |
+          TAG="${GITHUB_REF_NAME#v}"
+          PROJECT_VERSION="$(poetry version -s)"
+          echo "Tag: ${TAG}"
+          echo "Project version: ${PROJECT_VERSION}"
+          test "${TAG}" = "${PROJECT_VERSION}"
+
+      - name: Install dependencies
+        run: poetry install --no-interaction --with dev
+
+      - name: Build package
+        run: poetry build
+
+      - name: Run full test suite
+        run: poetry run pytest -q
+
+      - name: Generate release notes from changelog
+        id: changelog
+        uses: mikepenz/release-changelog-builder-action@v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish to PyPI
+        env:
+          POETRY_PYPI_TOKEN_PYPI: ${{ secrets.PYPI_API_TOKEN }}
+        run: poetry publish --no-interaction
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          body: ${{ steps.changelog.outputs.changelog }}
+          files: |
+            dist/*

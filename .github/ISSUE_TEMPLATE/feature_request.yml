@@ -1,0 +1,29 @@
+name: Feature request
+description: Suggest an improvement for LogScope.
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem this solves
+      description: What user pain are you trying to solve?
+      placeholder: I cannot quickly identify top noisy services in pulse mode.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed_solution
+    attributes:
+      label: Proposed solution
+      description: How should LogScope behave?
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Other options you considered and why they are not ideal.
+    validations:
+      required: false

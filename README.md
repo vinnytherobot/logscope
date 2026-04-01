@@ -1,158 +1,80 @@
-<div align="center">
-  <img src="assets/logscope-logo.png" alt="LogScope Logo" width="150" height="150">
-  
-  # LogScope
-  
-  **Beautiful, simple, and powerful log viewer for the terminal.**
-  
-  [![Python](https://img.shields.io/badge/Python-3.9%2B-blue)](https://python.org)
-  [![Typer](https://img.shields.io/badge/CLI-Typer-green)](https://typer.tiangolo.com/)
-  [![Rich](https://img.shields.io/badge/UI-Rich-magenta)](https://rich.readthedocs.io/)
-  [![License](https://img.shields.io/badge/License-MIT-gray.svg)](#)
-</div>
+# LogScope
 
-<p align="center">
-  A modern CLI tool that turns boring text logs or messy JSON lines into stunning, structured, and colorful terminal outputs—complete with a live dashboard, smart highlighting, and HTML exporting.
-</p>
+LogScope is a Python CLI that parses plain-text and JSON logs and renders them in a readable, filterable, live terminal view.
 
----
-
-## Features that shine
-
-*   **Fast & Lightweight**: Tail files natively or stream huge data directly via pipes (`cat server.log | logscope`).
-*   **Colored & Structured Logs**: Automatically identifies `INFO`, `WARNING`, `ERROR`, `CRITICAL`, and `DEBUG`, applying beautiful typography.
-*   **Universal Parser**: Reads typical bracket logs (`[INFO]`) **and** parses modern NDJSON / JSON logs out of the box (e.g., Kubernetes, Docker).
-*   **Auto-Highlighting**: Magically highlights `IPs`, `URLs`, `Dates/Timestamps`, `UUIDs`, and `E-Mails` with dynamic colors.
-*   **Live Dashboard**: Watch logs stream in real-time alongside a live statistics panel keeping track of Error vs Info counts (`--dashboard`).
-*   **HTML Export**: Loved your console output so much you want to share it? Export the beautiful log structure directly to an HTML file to share with your team! (`--export-html results.html`)
-*   **Filtering**: Filter by one or more levels (`--level ERROR` or `--level ERROR,WARN,INFO`), or by **minimum severity** with `--min-level` (e.g. `WARN` shows `WARN` and everything more severe). Do not combine `--level` and `--min-level` in the same run. Search by substring (`--search`) or regular expression (`--regex` / `-e`), with optional **case-sensitive** matching and **invert match** (`--invert-match` / `-v`, grep-style) to hide matching lines.
-*   **JSON observability fields**: For single-line JSON logs, LogScope extracts common DevOps fields when present—**service** (e.g. `service`, `service.name`, Kubernetes `pod` / container names), **trace** (`trace_id`, `traceId`, nested `trace.id`), and **span** (`span_id`, `spanId`)—and shows them as a compact dim prefix before the message (truncated trace/span when very long).
-*   **Pulse Signal Deck** (`--pulse`): Full-screen live view with a bottom **Signal Deck**—instant and average lines/sec, a rolling **signal %** health score based on severe lines (`ERROR`, `CRITICAL`, `ALERT`, `FATAL`), and an ASCII **sparkline** for severity bursts. Ideal with `--follow`. Not compatible with `--dashboard` or `--export-html`.
-*   **Themes**: Built-in themes include `default`, `neon`, `ocean`, `forest`, `minimal`, and **`spectra`** (cyan/magenta, geometric icons). Use `--theme` / `-t` or persist via `.logscoperc` (see CLI help).
-*   **Version**: `logscope --version` or `logscope -V` prints the installed package version.
-*   **Plain output**: Use `--no-color` when you need unstyled text (e.g. piping to other tools or logs without ANSI codes).
-*   **Gzip logs**: Read `.gz` files directly—LogScope opens them as text without a manual `zcat` pipe.
-
----
+[![CI](https://github.com/vinnytherobot/logscope/actions/workflows/ci.yml/badge.svg)](https://github.com/vinnytherobot/logscope/actions/workflows/ci.yml)
+[![Coverage](https://img.shields.io/badge/coverage-pytest--cov-informational)](https://github.com/vinnytherobot/logscope/actions/workflows/ci.yml)
+[![PyPI](https://img.shields.io/pypi/v/logscope)](https://pypi.org/project/logscope/)
+[![License](https://img.shields.io/github/license/vinnytherobot/logscope)](./LICENSE)
 
 ## Installation
 
-Ensure you have Python 3.9+ and pip installed.
+Supported package managers and flows:
 
 ```bash
-# Clone the repository
-git clone https://github.com/vinnytherobot/logscope.git
-cd logscope
+# pip (from PyPI)
+pip install logscope
 
-# Install via Poetry
-poetry install
-poetry run logscope --help
-
-# Or install globally via pip
+# pip (local editable)
 pip install -e .
+
+# Poetry (project contributors)
+poetry install
 ```
 
----
+## Quickstart
 
-## Usage & Examples
-
-### Using a File
-```bash
-# Basic colorized look
-logscope /var/log/syslog
-
-# Tailing a log in real-time (like tail -f)
-logscope backend.log --follow
-
-# Filter only errors
-logscope production.log --level ERROR
-
-# Multiple levels (comma-separated)
-logscope production.log --level ERROR,WARN,INFO
-
-# Minimum severity (shows this level and all more severe; do not use with --level)
-logscope production.log --min-level WARN
-
-# Show version
-logscope --version
-
-# Search text dynamically
-logscope server.log --search "Connection Timeout"
-
-# Regex search (requires --search)
-logscope server.log --search "timeout|refused|ECONNRESET" --regex
-
-# Hide lines that match a pattern
-logscope noisy.log --search "healthcheck" --invert-match
-
-# Case-sensitive search
-logscope app.log --search "UserID" --case-sensitive
-
-# No colors (plain terminal output)
-logscope app.log --no-color
-
-# Compressed log file
-logscope archive/app.log.gz
-```
-
-### Piping from other commands (Stdin support)
-LogScope acts as a brilliant text reformatter for other tools!
+Minimal executable example:
 
 ```bash
-kubectl logs my-pod -f | logscope
-docker logs api-gateway | logscope --level CRITICAL
-cat nginx.log | grep -v GET | logscope --dashboard
+# 1) Install
+pip install logscope
+
+# 2) Run against a file
+logscope ./examples/sample.log
+
+# 3) Follow logs in real time with pulse mode
+logscope ./examples/docker.log --follow --pulse
 ```
 
-### The Live Dashboard Mode
-Monitor your logs like a pro with a live dashboard tracking error occurrences.
+Useful follow-up commands:
 
 ```bash
-logscope app.log --dashboard --follow
+# Filter by severity
+logscope ./examples/api.log --min-level WARN
+
+# Search + regex
+logscope ./examples/api.log --search "timeout|refused" --regex
+
+# Export rendered output
+logscope ./examples/api.log --export-html report.html
 ```
 
-### Pulse Signal Deck (full-screen live HUD)
-Use **Pulse** for a terminal “heads-up” layout: scrolling recent lines plus a live **Signal Deck** (throughput, health %, sparkline). Combine with `--follow` for streaming sources.
+## API Reference
 
-```bash
-logscope app.log --pulse
-logscope app.log --follow --pulse --min-level INFO
-kubectl logs -f deploy/api | logscope --pulse --theme spectra
-```
+Public package entry points:
 
-**Note:** `--pulse` cannot be used together with `--dashboard` or `--export-html`.
+- `logscope.cli:app` -> Typer command group exposed as `logscope`.
+- `logscope.parser.parse_line()` -> parses a single line into `LogEntry`.
+- `logscope.viewer.stream_logs()` -> standard stream renderer.
+- `logscope.viewer.run_dashboard()` -> dashboard mode renderer.
+- `logscope.viewer.run_pulse_stream()` -> pulse mode renderer.
 
-### Themes (including Spectra)
-```bash
-logscope app.log --theme spectra
-logscope app.log -t ocean
-```
+Developer documentation:
 
-### Exporting to HTML
-Need to attach the logs to a Jira ticket or Slack message but want to keep the formatting?
+- [`docs/architecture-review.md`](./docs/architecture-review.md)
+- [`docs/api.md`](./docs/api.md)
 
-```bash
-logscope failed_job.log --export-html bug_report.html
-```
+## Roadmap
 
----
-
-## Stack
-
-*   [**Rich**](https://github.com/Textualize/rich) -> UI Layouts, Colors, Highlighters, HTML Export.
-*   [**Typer**](https://github.com/tiangolo/typer) -> Modern, fast, and robust CLI creation.
-*   [**typing-extensions**](https://github.com/python/typing_extensions) -> Typed CLI annotations on Python 3.9.
-*   **Pathlib / Sys / gzip** -> File and standard input streaming; gzip text logs.
+- Stabilize release automation for PyPI publishing and changelog generation.
+- Expand test coverage for follow mode and HTML export flows.
+- Add user-facing docs for custom theme packs and plugin-like format adapters.
 
 ## Contributing
-Open an issue or submit a pull request! Tests are written using `pytest`.
 
-```bash
-# Running tests
-pytest tests/
-```
+Contribution guide is in [`CONTRIBUTING.md`](./CONTRIBUTING.md).
 
 ## License
-MIT License.
 
-Made by [vinnytherobot](https://github.com/vinnytherobot)
+MIT. See [`LICENSE`](./LICENSE).

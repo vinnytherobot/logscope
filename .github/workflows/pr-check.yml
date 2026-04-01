@@ -1,0 +1,93 @@
+name: PR Checks
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited]
+
+permissions:
+  pull-requests: write
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate PR title (Conventional Commits)
+        uses: amannn/action-semantic-pull-request@v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check tests for code changes
+        id: tests_check
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const files = await github.paginate(
+              github.rest.pulls.listFiles,
+              {
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: context.payload.pull_request.number,
+                per_page: 100
+              }
+            );
+            const changedCode = files.filter(f => /^logscope\/.*\.py$/.test(f.filename));
+            const changedTests = files.filter(f => /^tests\/.*\.py$/.test(f.filename));
+            const ok = changedCode.length === 0 || changedTests.length > 0;
+            core.setOutput("ok", ok ? "true" : "false");
+            if (!ok) {
+              core.setFailed("Python code changed in logscope/ but no tests/ file was updated.");
+            }
+
+      - name: Check docs updated
+        id: docs_check
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const files = await github.paginate(
+              github.rest.pulls.listFiles,
+              {
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: context.payload.pull_request.number,
+                per_page: 100
+              }
+            );
+            const codeChanged = files.some(f => /^logscope\/.*\.py$/.test(f.filename));
+            const docsChanged = files.some(f =>
+              /^README\.md$/.test(f.filename) ||
+              /^CONTRIBUTING\.md$/.test(f.filename) ||
+              /^docs\//.test(f.filename)
+            );
+            const ok = !codeChanged || docsChanged;
+            core.setOutput("ok", ok ? "true" : "false");
+            if (!ok) {
+              core.setFailed("Code changed but docs were not updated (README.md, CONTRIBUTING.md or docs/).");
+            }
+
+      - name: Comment PR summary
+        if: always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = context.payload.pull_request.title;
+            const testsOk = "${{ steps.tests_check.outputs.ok }}" || "false";
+            const docsOk = "${{ steps.docs_check.outputs.ok }}" || "false";
+            const body = [
+              "## PR Check Summary",
+              "",
+              `- Conventional title: ${title}`,
+              `- Tests updated when code changes: ${testsOk}`,
+              `- Docs updated when code changes: ${docsOk}`
+            ].join("\n");
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number,
+              body
+            });

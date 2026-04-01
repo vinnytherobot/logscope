@@ -76,3 +76,4 @@ poetry.lock
 
 # Cursor
 .cursor/
+AGENT.md
