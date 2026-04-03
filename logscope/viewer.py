@@ -13,7 +13,7 @@ from rich.text import Text
 from rich.highlighter import RegexHighlighter
 from rich.theme import Theme
 
-from .parser import parse_line, LogEntry
+from .parser import parse_line, LogEntry, _normalize_level
 from .themes import DEFAULT_THEMES
 
 if sys.platform == "win32" and hasattr(sys.stdout, "reconfigure"):
@@ -93,22 +93,16 @@ class LogScopeManager:
 manager = LogScopeManager()
 
 
-def _normalize_level_token(token: str) -> str:
-    t = token.strip().upper()
-    if t == "WARNING":
-        return "WARN"
-    if t == "ERR":
-        return "ERROR"
-    if t == "EMERGENCY":
-        return "FATAL"
-    return t
-
-
 def parse_level_filter(level: Optional[str]) -> Optional[Set[str]]:
     if not level or not level.strip():
         return None
-    parts = {_normalize_level_token(p) for p in level.split(",") if p.strip()}
+    parts = {_normalize_level(p.strip()) for p in level.split(",") if p.strip()}
     return parts or None
+
+
+def _normalize_level_token(token: str) -> str:
+    """Deprecated: use _normalize_level from parser instead."""
+    return _normalize_level(token.strip())
 
 
 def line_passes_level(entry_level: str, allowed: Optional[Set[str]]) -> bool:

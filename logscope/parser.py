@@ -15,6 +15,19 @@ class LogEntry:
     span_id: Optional[str] = None
 
 
+# Level normalization constants
+_NORMALIZE_LEVEL_MAP = {
+    "WARNING": "WARN",
+    "EMERGENCY": "FATAL",
+    "ERR": "ERROR",
+}
+
+
+def _normalize_level(level: str) -> str:
+    """Normalize log level aliases to canonical forms."""
+    return _NORMALIZE_LEVEL_MAP.get(level.upper(), level.upper())
+
+
 def _extract_json_observability(data: dict) -> Tuple[Optional[str], Optional[str], Optional[str]]:
     """Pull service / trace / span from common JSON log shapes (K8s, OTel, Docker)."""
     k8s = data.get("kubernetes")
@@ -60,7 +73,7 @@ def parse_line(line: str) -> LogEntry:
         try:
             data = json.loads(line)
             # Find level key
-            level = str(data.get('level', data.get('severity', data.get('log.level', 'UNKNOWN')))).upper()
+            level = _normalize_level(data.get('level', data.get('severity', data.get('log.level', 'UNKNOWN'))))
             # Find message key
             message = str(data.get('message', data.get('msg', data.get('text', line))))
             
@@ -74,12 +87,6 @@ def parse_line(line: str) -> LogEntry:
                 except ValueError:
                     pass
 
-            if level == "WARNING":
-                level = "WARN"
-            if level == "EMERGENCY":
-                level = "FATAL"
-            if level == "ERR":
-                level = "ERROR"
             svc, tid, sid = _extract_json_observability(data)
             return LogEntry(
                 level=level,
@@ -100,16 +107,8 @@ def parse_line(line: str) -> LogEntry:
         match = re.search(r'\b(TRACE|DEBUG|INFO|NOTICE|WARN|WARNING|ERROR|ERR|CRITICAL|ALERT|FATAL|EMERGENCY)\b', line, re.IGNORECASE)
 
     if match:
-        level = match.group(1).upper()
-        
-        # Normalize levels
-        if level == "WARNING":
-            level = "WARN"
-        if level == "EMERGENCY":
-            level = "FATAL"
-        if level == "ERR":
-            level = "ERROR"
-            
+        level = _normalize_level(match.group(1))
+
         # Remove the [LEVEL] part from the message for cleaner display
         message = line.replace(match.group(0), '', 1).strip()
         

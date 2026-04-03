@@ -6,7 +6,7 @@ This page documents the public Python-facing surfaces currently used by LogScope
 
 - `logscope.cli:app`
   - Typer app exported as the `logscope` command by Poetry scripts.
-  - Command options include filtering (`--level`, `--min-level`), search (`--search`, `--regex`), display (`--dashboard`, `--pulse`), and export (`--export-html`).
+  - Command options include filtering (`--level`), search (`--search`, `--regex`), display (`--dashboard`), and export (`--export-html`).
 
 ## Parser API
 
@@ -31,9 +31,6 @@ This page documents the public Python-facing surfaces currently used by LogScope
 
 - `logscope.viewer.run_dashboard(...)`
   - Runs Rich live dashboard with severity counters.
-
-- `logscope.viewer.run_pulse_stream(...)`
-  - Runs full-screen pulse UI with signal deck metrics.
 
 ## Theme API
 
