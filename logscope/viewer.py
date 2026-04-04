@@ -171,12 +171,14 @@ def line_passes_filters(
 
 
 def get_lines(file: TextIO, follow: bool):
-    """Generator that yields lines from a file, optionally tailing it."""
+    """Generator that yields (line_number, line) tuples from a file, optionally tailing it."""
+    line_number = 0
     # yield existing lines
     for line in file:
+        line_number += 1
         if line.strip():
-            yield line
-            
+            yield line_number, line
+
     if not follow:
         return
 
@@ -188,8 +190,9 @@ def get_lines(file: TextIO, follow: bool):
             if not line:
                 time.sleep(0.1)
                 continue
+            line_number += 1
             if line.strip():
-                yield line
+                yield line_number, line
     except KeyboardInterrupt:
         return
 
@@ -219,8 +222,8 @@ def stream_logs(
 
     line_count = 0
     try:
-        for line in get_lines(file, follow):
-            line_count += 1
+        for line_number, line in get_lines(file, follow):
+            line_count = line_number
             entry = parse_line(line)
 
             if not line_passes_filters(
@@ -330,7 +333,8 @@ def run_dashboard(
     
     try:
         with Live(generate_layout(), console=manager.console, refresh_per_second=10) as live:
-            for line in get_lines(file, follow):
+            for line_number, line in get_lines(file, follow):
+                total_processed = line_number
                 entry = parse_line(line)
 
                 if not line_passes_filters(
@@ -347,7 +351,6 @@ def run_dashboard(
                     continue
 
                 # Update stats tally
-                total_processed += 1
                 entry_level = entry.level if entry.level in stats else "UNKNOWN"
                 stats[entry_level] += 1
 
