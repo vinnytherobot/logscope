@@ -35,9 +35,9 @@ DEFAULT_THEMES = {
             "NOTICE": ("🌌", "bold purple"),
             "WARN": ("🔥", "bold yellow1"),
             "ERROR": ("🧨", "bold red1"),
-            "CRITICAL": ("☢️ ", "bold purple"),
+            "CRITICAL": ("⬢", "bold magenta"),
             "ALERT": ("📣", "bold orange1"),
-            "FATAL": ("☣️ ", "bold dark_red"),
+            "FATAL": ("☣️", "bold dark_red"),
             "UNKNOWN": ("?", "dim white")
         },
         "highlights": {
