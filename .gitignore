@@ -76,5 +76,11 @@ poetry.lock
 
 # Cursor
 .cursor/
+.claude
+.claude/
+.gemini/
 AGENT.md
 CLAUDE.md
+RELEASE_NOTES_v*.md
+TASKS.md
+TODO.md
